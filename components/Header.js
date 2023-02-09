@@ -15,7 +15,7 @@ const Header = () => {
     <div className='sticky top-0 w-full left-0 bg-inherit flex items-center justify-between p-4 border-b border-solid border-white'>
         <h1 className='text-3xl select-none sm:text-6xl'>TODO LIST</h1>
          
- 
+ <div className='flex flex-col items-end justify-end'>
 <i onClick={()=>{
   if(currentUser)
 
@@ -25,8 +25,13 @@ const Header = () => {
 }
   
   } className="fa-solid fa-user text-xl sm:text-3xl duration-300 hover:opacity-40 cursor-pointer"></i>
+  
+   {currentUser?  currentUser.email : ""} 
+  </div>
+  
 
         </div>
+        
 
         </>
   )

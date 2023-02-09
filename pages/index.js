@@ -11,7 +11,9 @@ export default function Home() {
 
   const { currentUser } = useAuth()
 
-  console.log(currentUser)
+  console.log(Array.isArray(currentUser))
+
+  
 
   return (
     <>
