@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { async } from '@firebase/util'
 import TodoCard from './TodoCard'
+// import { WalletCard } from './WalletCard'
 
 const UserDashboard = () => {
  
@@ -41,15 +42,69 @@ const UserDashboard = () => {
    
   //  }
    
-  
+  const [walletAddress, setWalletAddress] = useState("")
+  const [walletAmount, setWalletAmount] = useState("")
+
+ 
+
+ const handleClick = async()=>{
+ 
+  console.log("processing")
+   
+  if(typeof window.ethereum !== "undefined") {
+    console.log("detected")
+
+     try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts"
+        })
+        console.log(accounts)
+        setWalletAddress(accounts[0])
+
+        
+       await checkBalance(accounts[0])
+       
+
+
+
+     }catch(err) {
+        console.log("error connecting to wallet")
+     }
+
+
+  }else {
+    console.log("metamask not detected")
+  }
+
+
+
+ }
+
+ async function checkBalance (address){
+
+  const balance = await window.ethereum.request({
+    method : "eth_getBalance",
+    params: [address,'latest']
+  })
+  console.log(balance)
+ 
+  setWalletAmount(balance)
+
+   
+
+ }
+
+
+
 
   return (
     
     <div className='w-full max-w-[65ch] text-xl sm:text-sm mx-auto flex flex-col gap-3 sm:gap-5'>
-   { addTodo && <div className='flex items-stretch'>
+   { addTodo && <div className='flex'>
       <input onKeyDown={handleEnterKey} type="text" placeholder='Enter Todo' value={todo} onChange={(e)=>setTodo(e.target.value)} 
       className="outline-none p-3 text-base sm:text-lg text-slate-900 flex-1"   />
       <button onClick={handleTodo} className='w-fit px-4 sm:px-6 py-2 sm:py-3 bg-amber-400 text-white font-medium text-base duration-300 hover:opacity-40'>Add</button>
+     
 </div>}
       {
         userInfo && (
@@ -71,9 +126,12 @@ const UserDashboard = () => {
 
         </>)
       }
+      
 { !addTodo &&
 <button className="text-cyan-300 border border-solid border-cyan-300 py-2 uppercase text-lg duration-300 hover:opacity-30" onClick={()=> setAddTodo(true)}>ADD TODO</button>
 }
+
+
    </div>
 
   )
